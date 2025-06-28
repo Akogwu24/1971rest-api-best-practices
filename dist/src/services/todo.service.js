@@ -11,25 +11,32 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteTodoService = exports.updateTodoService = exports.createTodoService = exports.getTodoByIdService = exports.getAllTodosService = void 0;
 const todo_model_1 = require("../models/todo.model");
+/**
+ * Service layer for Todo operations
+ * This layer interacts with the TodoModel to perform CRUD operations
+ */
 const getAllTodosService = () => __awaiter(void 0, void 0, void 0, function* () {
     return yield todo_model_1.TodoModel.find();
 });
 exports.getAllTodosService = getAllTodosService;
-const getTodoByIdService = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield todo_model_1.TodoModel.findById(id);
+const getTodoByIdService = (totId) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield todo_model_1.TodoModel.findById(totId);
 });
 exports.getTodoByIdService = getTodoByIdService;
 const createTodoService = (data) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log("data", data);
     const newTodo = new todo_model_1.TodoModel(data);
     return yield newTodo.save();
 });
 exports.createTodoService = createTodoService;
-const updateTodoService = (id, data) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield todo_model_1.TodoModel.findByIdAndUpdate(id, data, { new: true, runValidators: true });
+const updateTodoService = (_a) => __awaiter(void 0, [_a], void 0, function* ({ todoId, data, }) {
+    return yield todo_model_1.TodoModel.findByIdAndUpdate(todoId, data, { new: true, runValidators: true });
 });
 exports.updateTodoService = updateTodoService;
-const deleteTodoService = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield todo_model_1.TodoModel.findByIdAndDelete(id);
+const deleteTodoService = (todoId) => __awaiter(void 0, void 0, void 0, function* () {
+    const deletedTodo = yield todo_model_1.TodoModel.findByIdAndDelete(todoId);
+    if (!deletedTodo) {
+        throw new Error("Todo does not exist");
+    }
+    return deletedTodo;
 });
 exports.deleteTodoService = deleteTodoService;

@@ -1,4 +1,6 @@
-# Plan to Generate Swagger Documentation
+# swagger link http://localhost:8080/api-docs/
+
+# Plan to Generate Swagger Documentation http://localhost:8080/api-docs/
 
 This document outlines the detailed plan to generate Swagger documentation for the existing API.
 

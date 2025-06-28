@@ -36,16 +36,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const todoController = __importStar(require("../controllers/todo.controller"));
 const validator_middleware_1 = require("../middleware/validator.middleware");
-// import { createTodoSchema, creatTodoValidation } from "../validators/todo.validator";
 const todo_validator_1 = require("../validators/todo.validator");
+const isValidMogodbID_middleware_1 = require("../middleware/isValidMogodbID.middleware");
 const router = (0, express_1.Router)();
 // The routes are prefixed with "/api/v1/todos" in the main app file
 router.get("/", todoController.getTodosController);
-// router.post("/", zodaVlidationMiddleware(createTodoSchema), todoController.createTodoController);
-router.post("/", todo_validator_1.creatTodoValidation, validator_middleware_1.validationMiddleware, todoController.createTodoController);
-router
-    .route("/:id")
-    .get(todoController.getTodoByIdController)
-    .put(todoController.updateTodoController)
-    .delete(todoController.deleteTodoController);
+router.post("/", (0, validator_middleware_1.validationMiddleware)(todo_validator_1.createTodoSchema), todoController.createTodoController);
+router.get("/:todoId", (0, isValidMogodbID_middleware_1.isValidMogodbID)("todoId"), todoController.getTodoByIdController);
+router.put("/:todoId", (0, isValidMogodbID_middleware_1.isValidMogodbID)("todoId"), todoController.updateTodoController);
+router.delete("/:todoId", (0, isValidMogodbID_middleware_1.isValidMogodbID)("todoId"), todoController.deleteTodoController);
 exports.default = router;

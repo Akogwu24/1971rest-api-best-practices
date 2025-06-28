@@ -1,100 +1,23 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getTodosQuerySchema = exports.getTodoByIdSchema = exports.deleteTodoSchema = exports.updateTodoSchema = exports.createTodoSchema = exports.todoGetAllValidator = exports.getTodoetByIdValidator = exports.deleteTodoValidator = exports.updateTodoValidator = exports.creatTodoValidation = void 0;
+exports.getTodosQuerySchema = exports.getTodoByIdSchema = exports.deleteTodoSchema = exports.updateTodoSchema = exports.createTodoSchema = void 0;
 const constants_1 = require("../utils/constants");
-const express_validator_1 = require("express-validator");
-const title = (0, express_validator_1.check)("title", "title is required")
-    .trim()
-    .exists()
-    .withMessage("Title is missing")
-    .notEmpty()
-    .withMessage("Title is required")
-    .isString()
-    .withMessage("Title must be a string");
-const description = (0, express_validator_1.check)("description")
-    // .optional()
-    .isString()
-    .withMessage("Description must be a string")
-    .trim();
-const completionStatus = (0, express_validator_1.check)("completionStatus")
-    // .optional()
-    .isIn(Object.values(constants_1.TODO_COMPLETION_STATUS_ENUMS))
-    .withMessage(`Completion status must be one of: ${Object.values(constants_1.TODO_COMPLETION_STATUS_ENUMS)}`);
-const dueDate = (0, express_validator_1.check)("dueDate")
-    .isISO8601()
-    .withMessage("Due date must be a valid ISO 8601 date string")
-    .toDate()
-    .custom((value) => {
-    if (value < new Date()) {
-        throw new Error("Due date cannot be in the past");
-    }
-    return true;
-});
-const priority = (0, express_validator_1.check)("priority")
-    // .optional()
-    .isIn(Object.values(constants_1.TODO_PRIORITY_ENUMS))
-    .withMessage(`Priority must be one of: ${Object.values(constants_1.TODO_PRIORITY_ENUMS)}`);
-const page = (0, express_validator_1.check)("page")
-    .optional()
-    .isInt({ min: 1 })
-    .withMessage("Page must be a positive integer")
-    .default(1);
-const limit = (0, express_validator_1.check)("limit")
-    .optional()
-    .isInt({ min: 1, max: 100 })
-    .withMessage("Limit must be a positive integer between 1 and 100")
-    .default(10);
-const sort = (0, express_validator_1.check)("sort")
-    .optional()
-    .isIn(["title", "dueDate", "priority", "completionStatus"])
-    .withMessage("Sort must be one of: title, dueDate, priority, completionStatus")
-    .default("dueDate");
-const order = (0, express_validator_1.check)("order")
-    .optional()
-    .isIn(["asc", "desc"])
-    .withMessage("Order must be either 'asc' or 'desc'")
-    .default("asc");
-const search = (0, express_validator_1.check)("search")
-    .optional()
-    .isString()
-    .withMessage("Search must be a string")
-    .trim()
-    .isLength({ min: 1 })
-    .withMessage("Search query must not be empty");
-exports.creatTodoValidation = [title, description, completionStatus, dueDate, priority];
-exports.updateTodoValidator = [
-    (0, express_validator_1.check)("id").isMongoId().withMessage("Invalid Todo ID"),
-    title.optional(),
-    description.optional(),
-    completionStatus.optional(),
-    dueDate.optional(),
-    priority.optional(),
-];
-exports.deleteTodoValidator = [(0, express_validator_1.check)("id").isMongoId().withMessage("Invalid Todo ID")];
-exports.getTodoetByIdValidator = [(0, express_validator_1.check)("id").isMongoId().withMessage("Invalid Todo ID")];
-exports.todoGetAllValidator = [
-    page,
-    limit,
-    sort,
-    order,
-    search,
-    completionStatus.optional(),
-    priority.optional(),
-    dueDate.optional(),
-];
 const zod_1 = require("zod");
-// import { TODO_COMPLETION_STATUS_ENUMS, TODO_PRIORITY_ENUMS } from '../utils/constants';
 //zod schemas for validation
 // --- Reusable Field Schemas ---
-const titleSchema = zod_1.z.string({ required_error: "Title is required" }).trim().min(1, "Title is required");
-const descriptionSchema = zod_1.z.string({ invalid_type_error: "Description must be a string" }).trim();
+const titleSchema = zod_1.z.string({ required_error: "Title is required" }).trim().min(1, "Title is requiredkkk");
+const descriptionSchema = zod_1.z
+    .string({ required_error: "Title is required", invalid_type_error: "Description must be a string" })
+    .trim()
+    .min(3, "Description is too short, must be at least 3 characters")
+    .max(500, "Description must not exceed 500 characters");
 const completionStatusSchema = zod_1.z.enum(Object.values(constants_1.TODO_COMPLETION_STATUS_ENUMS), {
     errorMap: () => ({
         message: `Completion status must be one of: ${Object.values(constants_1.TODO_COMPLETION_STATUS_ENUMS).join(", ")}`,
     }),
 });
 const dueDateSchema = zod_1.z
-    .string()
+    .string({ required_error: "Due Date is required", invalid_type_error: "Must be of type " })
     .refine((val) => !isNaN(Date.parse(val)), {
     message: "Due date must be a valid ISO 8601 date string",
 })
@@ -112,9 +35,9 @@ const searchSchema = zod_1.z.string().min(1, "Search query must not be empty").o
 // --- Validators as Zod Schemas ---
 exports.createTodoSchema = zod_1.z.object({
     title: titleSchema,
-    description: descriptionSchema.optional(),
-    completionStatus: completionStatusSchema.optional(),
-    dueDate: dueDateSchema.optional(),
+    description: descriptionSchema,
+    // completionStatus: completionStatusSchema.optional(),
+    dueDate: dueDateSchema,
     priority: prioritySchema.optional(),
 });
 exports.updateTodoSchema = zod_1.z.object({

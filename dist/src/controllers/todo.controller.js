@@ -50,9 +50,14 @@ const todoService = __importStar(require("../services/todo.service"));
 const catchAsyncErrors_1 = require("../middleware/catchAsyncErrors");
 const successRespose_1 = require("../utils/successRespose");
 const errorhandler_1 = __importDefault(require("../middleware/errorhandler"));
+/**
+ * Controller functions for handling Todo operations.
+ * These functions interact with the todoService to perform CRUD operations
+ * and return appropriate responses.
+ */
+// Create a new Todo
 exports.createTodoController = (0, catchAsyncErrors_1.CatchAsyncErrors)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log("controller");
         const { title, description, dueDate, priority } = req.body;
         const newTodo = yield todoService.createTodoService({ title, description, dueDate, priority });
         (0, successRespose_1.successResponse)({ res, statusCode: 201, message: "Todo created successfully", data: newTodo });
@@ -61,57 +66,55 @@ exports.createTodoController = (0, catchAsyncErrors_1.CatchAsyncErrors)((req, re
         next(new errorhandler_1.default(error.message, 500));
     }
 }));
+// Get all Todos
 exports.getTodosController = (0, catchAsyncErrors_1.CatchAsyncErrors)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const todos = yield todoService.getAllTodosService();
-        res.status(200).json(todos);
+        (0, successRespose_1.successResponse)({ res, message: "Todo created successfully", data: todos });
     }
     catch (error) {
-        next(error);
+        next(new errorhandler_1.default(error.message, 500));
     }
 }));
-const getTodoByIdController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+// Get a Todo by ID
+exports.getTodoByIdController = (0, catchAsyncErrors_1.CatchAsyncErrors)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const todo = yield todoService.getTodoByIdService(req.params.id);
-        if (todo) {
-            res.status(200).json(todo);
+        const { todoId } = req.params;
+        const todo = yield todoService.getTodoByIdService(todoId);
+        if (!todo) {
+            next(new errorhandler_1.default("Todo not found", 404));
         }
-        else {
-            res.status(404).json({ message: "Todo not found" });
-        }
+        (0, successRespose_1.successResponse)({ res, data: todo, message: "Todo found successfully" });
     }
     catch (error) {
-        next(error);
+        next(new errorhandler_1.default(error.message, 500));
     }
-});
-exports.getTodoByIdController = getTodoByIdController;
-const updateTodoController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+}));
+// Update a Todo
+exports.updateTodoController = (0, catchAsyncErrors_1.CatchAsyncErrors)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const updatedTodo = yield todoService.updateTodoService(req.params.id, req.body);
-        if (updatedTodo) {
-            res.status(200).json(updatedTodo);
+        const { todoId } = req.params;
+        const updatedTodo = yield todoService.updateTodoService({ todoId, data: req.body });
+        if (!updatedTodo) {
+            res.status(404).json({ success: false, message: "Todo not found" });
         }
-        else {
-            res.status(404).json({ message: "Todo not found" });
-        }
+        (0, successRespose_1.successResponse)({ res, data: updatedTodo, message: "Todo updated successfully" });
     }
     catch (error) {
-        next(error);
+        next(new errorhandler_1.default(error.message, 500));
     }
-});
-exports.updateTodoController = updateTodoController;
-const deleteTodoController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+}));
+// Delete a Todo
+exports.deleteTodoController = (0, catchAsyncErrors_1.CatchAsyncErrors)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const deletedTodo = yield todoService.deleteTodoService(req.params.id);
-        if (deletedTodo) {
-            res.status(204).send(); // No content for successful deletion
+        const { todoId } = req.params;
+        const deletedTodo = yield todoService.deleteTodoService(todoId);
+        if (!deletedTodo) {
+            next(new errorhandler_1.default("Todo Not found", 500)); // No content for successful deletion
         }
-        else {
-            res.status(404).json({ message: "Todo not found" });
-        }
+        (0, successRespose_1.successResponse)({ res, data: deletedTodo, message: "Todo deleted successfully" });
     }
     catch (error) {
-        next(error);
+        next(new errorhandler_1.default(error.message, 500));
     }
-});
-exports.deleteTodoController = deleteTodoController;
+}));

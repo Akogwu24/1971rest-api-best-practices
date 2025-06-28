@@ -32,6 +32,7 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TodoModel = void 0;
 const constants_1 = require("../utils/constants");
@@ -62,4 +63,4 @@ const TodoSchema = new mongoose_1.Schema({
         default: constants_1.TODO_PRIORITY_ENUMS.MEDIUM,
     },
 }, { timestamps: true });
-exports.TodoModel = mongoose_1.default.model("Todo", TodoSchema);
+exports.TodoModel = (_a = mongoose_1.default.models.Todo) !== null && _a !== void 0 ? _a : mongoose_1.default.model("Todo", TodoSchema);
