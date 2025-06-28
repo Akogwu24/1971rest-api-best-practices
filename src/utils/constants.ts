@@ -12,4 +12,4 @@ export const TODO_PRIORITY_ENUMS = {
   HIGH: "HIGH",
 } as const;
 
-export const { MONGODB_URI, PORT } = process.env;
+export const { MONGODB_URI, PORT = 4040 } = process.env;

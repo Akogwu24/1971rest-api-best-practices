@@ -1,5 +1,8 @@
 import express, { Express } from "express";
 import cors from "cors";
+import swaggerUi from "swagger-ui-express";
+import swaggerJsdoc from "swagger-jsdoc";
+import swaggerOptions from "./config/swagger.config";
 import todoRoutes from "./routes/todo.route";
 import { logger } from "./middleware/logger.middleware";
 import { corsOptions } from "./config/corsOptions";
@@ -14,6 +17,10 @@ app.use(express.urlencoded({ extended: true }));
 
 //custom logger middleware
 app.use(logger);
+
+// Swagger documentation
+const specs = swaggerJsdoc(swaggerOptions);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 
 // Health check route
 app.get("/test", (req, res) => {

@@ -1,6 +1,13 @@
 import { NextFunction, Request, Response } from "express";
 import { ZodSchema } from "zod";
 
+/**
+ * Middleware to validate request body using Zod schema.
+ * If validation fails, it sends a 400 response with error details.
+ *
+ * @param schema - Zod schema to validate the request body against
+ * @returns Express middleware function
+ */
 export const validationMiddleware =
   (schema: ZodSchema<any>) => (req: Request, res: Response, next: NextFunction) => {
     try {

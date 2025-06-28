@@ -17,3 +17,4 @@ Sat, 28/06/2025, 15:21	VtWXUPtvOAuKRlD	Error: Cannot set headers after they are 
 Sat, 28/06/2025, 15:37	saUuMnW7UZoDHhA	Error: Cannot set headers after they are sent to the client
 Sat, 28/06/2025, 15:37	78lOdfEHKbNLQaJ	Error: Cannot set headers after they are sent to the client
 Sat, 28/06/2025, 15:37	Uhj8kIAqTbqTndm	Error: Cannot set headers after they are sent to the client
+Sat, 28/06/2025, 16:28	KKCvVIdn1rSBoxb	Error: Not Found - /api/v1/todos

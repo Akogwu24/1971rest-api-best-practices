@@ -1,6 +1,7 @@
 import { CorsOptions } from "cors";
 
-const ALLOWED_ORIGINS = ["http://localhost:3000", "http://localhost:8080"];
+// const ALLOWED_ORIGINS = ['"http://localhost:4040", "http://localhost:8080"'];
+const ALLOWED_ORIGINS = ["*"];
 
 export const corsOptions: CorsOptions = {
   origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {

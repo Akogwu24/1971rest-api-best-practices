@@ -2,6 +2,10 @@ import { TodoModel } from "@/models/todo.model";
 import { TTodo } from "@/types/todo";
 import { TCreateTodo, TDeleteTodo, TUpdateTodo } from "@/validators/todo.validator";
 
+/**
+ * Service layer for Todo operations
+ * This layer interacts with the TodoModel to perform CRUD operations
+ */
 export const getAllTodosService = async (): Promise<TTodo[]> => {
   return await TodoModel.find();
 };
