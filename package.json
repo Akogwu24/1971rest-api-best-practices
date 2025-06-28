@@ -1,0 +1,37 @@
+{
+  "name": "rest-api-best-practices",
+  "version": "1.0.0",
+  "description": "rest api design best practices for common http requests-GET, POST,PUT,PATCH,DELETE",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc && tsc-alias",
+    "start": "node ./dist",
+    "dev": "tsx watch --env-file .env -- index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "rest-api",
+    "best",
+    "practices"
+  ],
+  "author": "Akogwu Emmanuel",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "express-validator": "^7.2.0",
+    "mongoose": "^8.16.1",
+    "winston": "^3.13.0",
+    "zod": "^3.25.67"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/mongoose": "^5.11.97",
+    "@types/node": "^20.14.10",
+    "@types/winston": "^2.4.4",
+    "tsc-alias": "^1.8.16",
+    "tsx": "^4.20.3",
+    "typescript": "^5.5.3"
+  }
+}
